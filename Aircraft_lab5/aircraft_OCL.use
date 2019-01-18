@@ -1,0 +1,49 @@
+model AircraftSys
+
+class Person
+  attributes
+    name : String
+    age : Integer
+end
+
+class Aircraft
+  attributes
+    capacity : Integer
+  operations
+    board(p : Person)
+    begin 
+        insert (p, self) into Boarded
+    end
+
+    disembark(p : Person)
+    begin 
+        delete (p, self) from Boarded
+    end
+end
+
+association Boarded between
+    Person[*] role onboard
+    Aircraft[0..1]
+end
+
+
+
+constraints
+
+context Aircraft 
+  inv maxCap:
+    onboard->size() <= capacity
+
+-- contract for board(p:Person)
+	
+context Aircraft::board( p : Person)
+  pre preBoard1:
+    not onboard->includes(p) 
+    
+  pre preBoard2:
+    onboard->size() < capacity
+    
+  post postBoard:
+    onboard = onboard@pre->union(Set{p})
+
+	
