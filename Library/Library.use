@@ -1,0 +1,109 @@
+model Library
+
+class bookBorrower
+
+	attributes
+
+		name : String
+		bookBorrowed : String
+
+	operations
+
+		borrowBook( b : Book, c : Copy )
+		begin
+			self.bookBorrowed := b.name;
+			insert(b, self) into Borrow;
+			b.bookBorrowed(c)
+		end
+
+		returnBook( b : Book,  c: Copy)
+		begin
+			self.bookBorrowed := 'None';
+			delete(b, self) from Borrow;
+			insert(self, b) into Return;
+			b.bookReturned(c)
+		end
+
+end
+
+class Librarian
+
+	attributes
+
+		name : String
+
+	operations
+
+		viewMemberBooks( bB : bookBorrower)
+		begin
+			WriteLine(bB.name);
+			WriteLine(bB.bookBorrowed)
+		end
+
+end
+
+class Book
+	
+	attributes
+
+		name : String
+
+	operations
+
+		bookBorrowed( c : Copy)		
+		begin
+			c.takeCopy(self)
+		end
+
+		bookReturned( c: Copy)
+		begin
+			c.returnCopy(self)
+		end
+
+end
+
+class Copy
+
+	 attributes
+
+	 	bookName : String
+	 	amount : Integer
+
+	 operations
+
+	 	takeCopy(b : Book)
+	 	begin
+	 	if self.amount >= 0	 then
+	 		self.amount := self.amount - 1;
+	 	else
+	 		WriteLine('None of that book left');
+	 	end;
+	 	end
+
+
+	 	returnCopy(b : Book)
+	 	begin
+	 		self.amount := self.amount - 1;
+	 	end
+
+end
+
+association Borrow between 
+	Book[*] 
+	bookBorrower[1] role Borrower
+end
+
+association Return between 
+	bookBorrower[1] 
+	Book[*] role Returned
+end
+
+association ViewBook between 
+	Librarian[1] 
+	bookBorrower[*] role Viewable
+end
+
+association isCopyOf between 
+	Book[1] 
+	Copy[*] role isCopyOf
+end

@@ -1,0 +1,10 @@
+!new bookBorrower('bob')
+!bob.name := 'Bob'
+!bob.bookBorrowed := 'None'
+
+!new Book('book_1')
+!book_1.name := ('How To C') 
+!book_1.status := ('Not borrowed') 
+
+!new Librarian('luke')
+!luke.name := ('Luke')
