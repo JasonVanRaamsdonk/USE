@@ -1,0 +1,76 @@
+model myPets
+
+class Person
+  attributes
+    name : String
+    student_id : String
+    bank_balance : Integer
+end
+
+class PetOwner < Person
+  attributes
+    vetCost : Integer
+  operations
+    setVetFor( x:Veterinarian, a:Animal)
+    begin
+        
+    end
+
+    payVetCost()
+    begin
+
+    end
+end
+
+class Animal
+  attributes
+    name : String
+    age : Integer
+    visits_to_vet : Integer
+  operations
+    ownership(p : PetOwner)
+    begin 
+        insert (p, self) into Owns
+    end
+
+    treating(v : Veterinarian)
+    begin 
+        insert (v, self) into Treats
+    end
+    getVetCost() : Integer
+    begin
+        
+    end
+end
+
+class Cat < Animal
+  attributes
+    type : String
+    hunts : Boolean
+end
+
+class Dog < Animal
+  attributes
+    bark : String
+    energetic : Boolean
+end
+
+
+class Veterinarian
+  attributes
+    name : String
+    tel : String
+    visit_cost : Integer
+end
+
+association Owns between
+  PetOwner[1]
+  Animal[1..*] role pets
+end
+
+association Treats between
+  Veterinarian[1] role vet
+  Animal[*] role patients
+end
+
+ 
